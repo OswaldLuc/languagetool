@@ -70,7 +70,9 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>${maven.assembly.plugin}</version>
                 <configuration>
+                    <descriptors>
                     <descriptor>src/main/assembly/zip.xml</descriptor>
+                    </descriptors>
                     <finalName>LanguageTool-${project.version}</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                     <archive>

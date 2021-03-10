@@ -81,7 +81,10 @@ public class DisambiguationPatternRule extends AbstractTokenBasedRule {
    *          {@code <marker>...</marker>} elements.
    */
   public final void setNewInterpretations(AnalyzedToken[] newReadings) {
-    newTokenReadings = newReadings.clone();
+      if(newReadings==null)
+          newTokenReadings = null;
+      else
+          newTokenReadings = newReadings.clone();
   }
 
   /**
@@ -139,4 +142,12 @@ public class DisambiguationPatternRule extends AbstractTokenBasedRule {
     return disambiguatedPOS;
   }
 
+public DisambiguationPatternRule duplicate() {
+       DisambiguationPatternRule duplicatedDisambiguationPatternRule = new DisambiguationPatternRule(getId(), getDescription(), 
+       language, patternTokens,  getDisambiguatedPOS(), matchElement, disAction);
+       duplicatedDisambiguationPatternRule.setNewInterpretations(newTokenReadings);
+       duplicatedDisambiguationPatternRule.setExamples(examples);
+       duplicatedDisambiguationPatternRule.setUntouchedExamples(untouchedExamples);
+        return duplicatedDisambiguationPatternRule;
+  }
 }

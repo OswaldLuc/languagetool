@@ -584,17 +584,17 @@ public class PatternRuleHandler extends XMLRuleHandler {
    */
   private void createRules(List<PatternToken> elemList,
     List<PatternToken> tmpPatternTokens, int numElement) {
-    String shortMessage = "";
+    String localShortMessage = "";
     if (this.shortMessage != null && this.shortMessage.length() > 0) {
-      shortMessage = this.shortMessage.toString();
+      localShortMessage = this.shortMessage.toString();
     } else if (shortMessageForRuleGroup != null && shortMessageForRuleGroup.length() > 0) {
-      shortMessage = this.shortMessageForRuleGroup.toString();
+      localShortMessage = this.shortMessageForRuleGroup.toString();
     }
     if (numElement >= elemList.size()) {
       AbstractPatternRule rule;
       if (tmpPatternTokens.size() > 0) {
         rule = new PatternRule(id, language, tmpPatternTokens, name,
-                internString(message.toString()), internString(shortMessage),
+                internString(message.toString()), internString(localShortMessage),
                 internString(suggestionsOutMsg.toString()), phrasePatternTokens.size() > 1, interpretPosTagsPreDisambiguation);
         rule.addTags(ruleTags);
         rule.addTags(ruleGroupTags);
@@ -610,7 +610,7 @@ public class PatternRuleHandler extends XMLRuleHandler {
         if (ruleAntiPatterns.size() > 0 || rulegroupAntiPatterns.size() > 0) {
           throw new RuntimeException("<regexp> rules currently cannot be used together with <antipattern>. Rule id: " + id + "[" + subId + "]");
         }
-        rule = new RegexPatternRule(id, name, message.toString(), shortMessage, suggestionsOutMsg.toString(), language, Pattern.compile(regexStr, flags), regexpMark);
+        rule = new RegexPatternRule(id, name, message.toString(), localShortMessage, suggestionsOutMsg.toString(), language, Pattern.compile(regexStr, flags), regexpMark);
         rule.setSourceFile(sourceFile);
       } else {
         throw new IllegalStateException("Neither '<pattern>' tokens nor '<regex>' is set in rule '" + id + "'");
@@ -624,11 +624,20 @@ public class PatternRuleHandler extends XMLRuleHandler {
         // When creating a new rule, we finally clear the backed-up variables. All the elements in
         // the OR group should share the values of backed-up variables. That's why these variables
         // are backed-up.
-        List<Match> suggestionMatchesBackup = new ArrayList<>(suggestionMatches);
-        List<Match> suggestionMatchesOutMsgBackup =  new ArrayList<>(suggestionMatchesOutMsg);
+        List<Match> suggestionMatchesBackup = new ArrayList<>();
+        suggestionMatches.forEach(suggestionMatch -> {
+            suggestionMatchesBackup.add(suggestionMatch.duplicate());
+          });
+        List<Match> suggestionMatchesOutMsgBackup = new ArrayList<>();
+        suggestionMatchesOutMsg.forEach(suggestionMatcheOutMsgBackup -> {
+            suggestionMatchesOutMsgBackup.add(suggestionMatcheOutMsgBackup.duplicate());
+          });
         int startPosBackup = startPos;
         int endPosBackup = endPos;
-        List<DisambiguationPatternRule> ruleAntiPatternsBackup = new ArrayList<>(ruleAntiPatterns);
+        List<DisambiguationPatternRule> ruleAntiPatternsBackup = new ArrayList<>();
+         ruleAntiPatterns.forEach(ruleAntiPattern -> {
+             ruleAntiPatternsBackup.add(ruleAntiPattern.duplicate());
+         });
         for (PatternToken patternTokenOfOrGroup : patternToken.getOrGroup()) {
           List<PatternToken> tmpElements2 = new ArrayList<>();
           tmpElements2.addAll(tmpPatternTokens);
@@ -636,9 +645,14 @@ public class PatternRuleHandler extends XMLRuleHandler {
           createRules(elemList, tmpElements2, numElement + 1);
           startPos = startPosBackup;
           endPos = endPosBackup;
-          suggestionMatches = suggestionMatchesBackup;
-          suggestionMatchesOutMsg = suggestionMatchesOutMsgBackup;
-          ruleAntiPatterns.addAll(ruleAntiPatternsBackup);
+          suggestionMatchesBackup.forEach(suggestionMatch -> {
+              suggestionMatches.add(suggestionMatch.duplicate());
+            });
+        suggestionMatchesOutMsgBackup.forEach(suggestionMatcheOutMsgBackup -> {
+            suggestionMatchesOutMsg.add(suggestionMatcheOutMsgBackup.duplicate());
+            });
+         ruleAntiPatternsBackup.forEach(ruleAntiPatternBackup -> {
+             ruleAntiPatterns.add(ruleAntiPatternBackup.duplicate()); });
         }
       }
       tmpPatternTokens.add(ObjectUtils.clone(patternToken));

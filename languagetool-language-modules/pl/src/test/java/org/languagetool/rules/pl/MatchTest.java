@@ -38,7 +38,7 @@ public class MatchTest {
   }
 
   private Match getMatch(String posTag, String posTagReplace, boolean spell) {
-    final Match match = new Match(posTag, posTagReplace, true, null, null, CaseConversion.NONE, false, spell, IncludeRange.NONE);
+    final Match match = new Match(posTag, posTagReplace, true, (String)null, null, CaseConversion.NONE, false, spell, IncludeRange.NONE);
     return match;
   }
 

@@ -176,7 +176,7 @@ public class PatternRuleMatcherTest {
     PatternRuleMatcher matcher = new PatternRuleMatcher(rule, false);
     
     // we need to add this line to trigger proper replacement but I am not sure why :(
-    rule.addSuggestionMatch(new Match(null, null, false, null, null, CaseConversion.NONE, false, false, IncludeRange.NONE));
+    rule.addSuggestionMatch(new Match(null, null, false, (String)null, null, CaseConversion.NONE, false, false, IncludeRange.NONE));
     
     RuleMatch[] matches = getMatches("a b c", matcher);
     assertEquals(Arrays.asList("a b c"), matches[0].getSuggestedReplacements());
@@ -422,7 +422,7 @@ public class PatternRuleMatcherTest {
     PatternToken patternTokenAB = new PatternToken("a|b", false, true, false);
     patternTokenAB.setSkipNext(-1);
     PatternToken patternTokenC = makeElement("\\0");
-    Match match = new Match(null, null, false, null, null, Match.CaseConversion.NONE, false, false, Match.IncludeRange.NONE);
+    Match match = new Match(null, null, false, (String)null, null, Match.CaseConversion.NONE, false, false, Match.IncludeRange.NONE);
     match.setTokenRef(0);
     match.setInMessageOnly(true);
     patternTokenC.setMatch(match);

@@ -64,11 +64,11 @@ public class MatchTest {
   }
 
   private Match getMatch(String posTag, String posTagReplace, CaseConversion caseConversion) {
-    return new Match(posTag, posTagReplace, true, null, null, caseConversion, false, false, IncludeRange.NONE);
+    return new Match(posTag, posTagReplace, true, (String)null, null, caseConversion, false, false, IncludeRange.NONE);
   }
 
   private Match getMatch(String posTag, String posTagReplace, IncludeRange includeRange) {
-    return  new Match(posTag, posTagReplace, true, null, null, CaseConversion.NONE, false, false, includeRange);
+    return  new Match(posTag, posTagReplace, true, (String)null, null, CaseConversion.NONE, false, false, includeRange);
   }
 
   //-- setup

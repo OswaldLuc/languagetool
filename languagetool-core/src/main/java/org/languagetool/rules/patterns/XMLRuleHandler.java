@@ -540,7 +540,7 @@ public class XMLRuleHandler extends DefaultHandler {
       pos = messageStr.indexOf('\\', ind);
       if (pos != -1 && messageStr.length() > pos && Character.isDigit(messageStr.charAt(pos + 1))) {
         if (pos == 0 || messageStr.charAt(pos - 1) != '\u0001') {
-          Match mWorker = new Match(null, null, false, null,
+          Match mWorker = new Match(null, null, false, (String)null,
               null, Match.CaseConversion.NONE, false, false, Match.IncludeRange.NONE);
           mWorker.setInMessageOnly(true);
           sugMatch.add(mWorker);

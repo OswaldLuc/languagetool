@@ -228,4 +228,34 @@ public final class Match {
     return includeSkipped;
   }
 
+   public Match(String posTag, String posTagReplace,
+      boolean postagRegexp, Pattern pRegexMatch,
+      String regexReplace, CaseConversion caseConversionType,
+      boolean setPOS,
+      boolean suppressMisspelled,
+      IncludeRange includeSkipped) {
+    this.posTag = posTag;
+    this.postagRegexp = postagRegexp;
+    this.caseConversionType = caseConversionType;
+    this.pRegexMatch = pRegexMatch;
+    if (postagRegexp && posTag != null) {
+      pPosRegexMatch = Pattern.compile(posTag);
+    }
+    this.regexReplace = regexReplace;
+    this.posTagReplace = posTagReplace;
+    this.setPos = setPOS;
+    this.includeSkipped = includeSkipped;
+    this.suppressMisspelled = suppressMisspelled;
+  }
+   
+   public Match duplicate(){
+       Match duplicatedMatch = new Match(posTag, posTagReplace, postagRegexp, pRegexMatch, 
+      regexReplace, caseConversionType, setsPos(), suppressMisspelled, includeSkipped);
+    duplicatedMatch.lemma = lemma;
+    duplicatedMatch.staticLemma = staticLemma;
+    duplicatedMatch.inMessageOnly = inMessageOnly;
+    duplicatedMatch.tokenRef = tokenRef;
+    return duplicatedMatch;
+  }
+   
 }
